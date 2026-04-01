@@ -1,0 +1,10 @@
+{
+  "name": "sg-plugins",
+  "owner": {
+    "name": "SG-Agentic-Org"
+  },
+  "metadata": {
+    "description": "Open-source plugins for Claude Code, Gemini CLI, and Codex by Sasha Glibiciuc"
+  },
+  "plugins": []
+}
