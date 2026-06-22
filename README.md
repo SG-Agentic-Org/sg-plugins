@@ -55,6 +55,7 @@ Standalone skills that can be installed directly without a full plugin.
 | Skill | Language | Description |
 |-------|----------|-------------|
 | [clear-writing](skills/clear-writing/) | RU | Business writing following Ilyakhov & Sarycheva methodology |
+| [autonomous-loop-onboarding](skills/autonomous-loop-onboarding/) | EN | Interview-driven setup that turns any task manager + LLM host into a personalized autonomous task loop (queue → agent works → self-review → approve). Model-agnostic core + adapters. |
 
 ### Installing a skill
 

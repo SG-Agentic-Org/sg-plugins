@@ -1,0 +1,66 @@
+# loop-config.yaml — the single source of truth for one user's autonomous loop.
+# Fill this in during onboarding (Phase 3). Every prompt file is generated from these
+# values. Keep it next to your generated worker-prompt.md.
+#
+# This is an EXAMPLE with annotations. Replace the example values with your own.
+# Never put a secret VALUE here — only the NAME of an env var / secret.
+
+# --- 1. LLM / agent environment ---
+llm:
+  host: "describe-your-ai-host"     # e.g. "coding-agent CLI", "desktop AI app", "hosted agent"
+  unattended: true                  # can it run on a schedule/trigger without you starting it?
+  parallel: true                    # can it run multiple tasks at once?
+  subagents: true                   # can one agent start helper agents? (needed for auto independent review)
+  auth_env_var: "LLM_API_KEY"       # NAME of the env var holding the key, if any (never the key itself)
+
+# --- 2. Task system ---
+task_system:
+  name: "describe-your-task-system" # e.g. "kanban board", "task-manager app", "folder of markdown files"
+  adapter: "generic-files"          # which adapter: generic-files | generic-board | <your-custom>
+  access: "full"                    # full | assisted | manual   (see references/adapters.md)
+  auth_env_var: "TASK_API_TOKEN"    # NAME of the credential env var, if the adapter needs one
+  # State mapping: how each abstract state is represented in YOUR system.
+  states:
+    queued:        "queued"         # label/column/folder that means QUEUED
+    in_progress:   "in-progress"
+    review:        "review"
+    blocked:       "blocked"
+    rework:        "rework"
+    closed:        "closed"         # only if closure is enabled
+    closure_error: "closure-error"  # only if closure is enabled
+
+# --- 3. Result storage ---
+result_storage:
+  path: "~/work/ai-results"         # one clear, writable destination for finished work
+  naming: "human-readable"          # human-readable, dated folders; never an internal ID alone
+
+# --- 4. Memory / knowledge / skills (OPTIONAL — set enabled:false if you have none) ---
+memory:
+  enabled: false
+  read_method: ""                   # e.g. "search my notes vault" — how the agent loads context
+  ingest_method: ""                 # e.g. "run my memory-ingest step" — used only by the closure step
+
+# --- 5. Permissions, schedule, limits ---
+permissions:
+  schedule: "manual"                # manual | hourly | daily | "trigger:<describe>"
+  hard_limits:                      # actions the agent must NEVER do without asking
+    - "no publishing or posting publicly"
+    - "no sending email or messages as me"
+    - "no payments or purchases"
+    - "no deleting significant data"
+    - "no pushing to a protected branch"
+    - "no changing access rights"
+    - "no editing my canonical config or production assets"
+  explicitly_allowed: []            # limits you chose to relax, e.g. "may post to my private test channel"
+  spend_cap: ""                     # optional, e.g. "$5 per run"
+  time_cap_per_task: ""             # optional, e.g. "30 minutes"
+
+# --- 6. Loop shape ---
+loop:
+  self_check: true                  # agent verifies its own work before handing back (recommended)
+  independent_review: true          # a separate/fresh-eyes reviewer pass
+  closure_enabled: false            # OPTIONAL: record accepted results to memory (needs memory.enabled: true)
+  golive_date: "2026-07-01"         # fixed start date for the acceptance window (not rolling)
+  # Acceptance always happens (even with closure off): how you approve and how you reject.
+  accepted_signal: "task completed" # your APPROVE action, e.g. "task completed", "label: done", "comment: approved"
+  rejected_signal: "label: rework"  # your REJECT action → task goes back to rework, e.g. "label: rework", "comment: try again"
