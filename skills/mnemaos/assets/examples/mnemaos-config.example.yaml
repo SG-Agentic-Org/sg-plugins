@@ -1,0 +1,49 @@
+# mnemaos-config.yaml — the single source of truth for one user's memory setup.
+# Generated from the Phase-1 interview answers. This example is annotated; the generated
+# file carries the user's real values. (This file is an example and may keep {{tokens}};
+# the smoke test ignores files under examples/.)
+
+# mode: how the vault is created
+mode: greenfield            # greenfield | adopt-existing-folder
+
+# who the user is — seeds profile.md, _start-here.md, and starter cards
+profile:
+  role: "{{role}}"                          # e.g. "freelance email marketer"
+  projects: ["{{project_1}}", "{{project_2}}"]   # 3-7 active projects/contexts
+  people: ["{{person_1}}"]                  # key people (optional)
+
+# the LLM host and what it can do — picks the adapter and the automation level
+environment:
+  host: "{{llm_host}}"        # e.g. "coding-agent CLI" / "desktop AI app" / "web chat"
+  file_access: true           # true = agent reads/writes the vault; false = copy-paste mode
+  unattended: false           # true = can run on a schedule/trigger
+  subagents: false            # true = supports an independent reviewer pass
+  adapter: "{{adapter}}"      # cli-agent | desktop-app | web-chat-manual | <custom>
+
+# where the vault lives and its format
+vault:
+  path: "{{vault_path}}"      # absolute path to the vault folder (NOT a {{token}} when generated)
+  format: "plain-markdown"    # plain-markdown | obsidian
+
+# what the agent may do and on what schedule
+automation:
+  schedule: "manual"          # manual | weekly | daily | <host-specific> (NOT a token when generated)
+  hard_limits:
+    - "never publish"
+    - "never send messages or email as me"
+    - "never delete files without asking"
+    - "never make payments"
+
+# which of the four skills to install (startup + closure always true)
+skills:
+  startup: true
+  closure: true
+  distillation: true
+  hygiene: true
+  independent_review: false   # true only if subagents available and the user wants it
+
+# optional add-ons (off by default)
+optional:
+  source_library: false       # RAW / Wiki / Outputs frame for external sources
+  question_reports: false     # weighty question -> short saved report
+  # provenance (source_refs) auto-on when source_library is on; trust opt-in for own ideas
