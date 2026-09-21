@@ -1,0 +1,20 @@
+[Unit]
+Description=mnemaos-mcp memory server (localhost only; TLS terminates at the reverse proxy)
+After=network.target
+
+[Service]
+Type=simple
+User=mnemaos
+EnvironmentFile=/etc/mnemaos.env
+ExecStart=/usr/bin/python3 /home/mnemaos/app/mnemaos-mcp/server.py --vault /home/mnemaos/vault --http 127.0.0.1:8765
+Restart=on-failure
+RestartSec=3
+# hardening
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=read-only
+ReadWritePaths=/home/mnemaos/vault
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

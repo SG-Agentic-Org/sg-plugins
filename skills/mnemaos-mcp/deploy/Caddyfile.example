@@ -1,0 +1,15 @@
+# Caddy in front of mnemaos-mcp: automatic HTTPS, proxy to localhost.
+# Replace memory.example.com with your (sub)domain, reload caddy, done.
+
+memory.example.com {
+	reverse_proxy 127.0.0.1:8765
+
+	# Optional belt-and-braces: refuse anything but the two known paths.
+	@known path /mcp /health
+	handle @known {
+		reverse_proxy 127.0.0.1:8765
+	}
+	handle {
+		respond 404
+	}
+}

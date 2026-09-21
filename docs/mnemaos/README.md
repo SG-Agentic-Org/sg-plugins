@@ -9,6 +9,7 @@ account. The memory is just files: yours to read, edit, back up, and walk away w
 
 → Full descriptions: [`about.md`](about.md) (EN) · [`about.ru.md`](about.ru.md) (RU)
 → The skill itself: [`skills/mnemaos/`](../../skills/mnemaos/) (install this)
+→ Your own memory server (optional): [`skills/mnemaos-mcp/`](../../skills/mnemaos-mcp/README.md)
 
 ---
 
@@ -58,13 +59,33 @@ auto-deleted — you decide. You can always revert from the backup.
 
 Host-specific routine scheduling is written into a generated `SETUP.md` during onboarding.
 
+## Optional: your own memory server (MCP)
+
+The file-based system above is complete on its own. If you want more reach, the package also
+ships [`skills/mnemaos-mcp/`](../../skills/mnemaos-mcp/README.md) — a small memory server (standard-library Python,
+zero dependencies) that serves the same vault to **any MCP-capable LLM client** through six
+tools: `memory_context`, `memory_search`, `memory_get`, `memory_list`, `memory_write`,
+`memory_health`. Three shapes, chosen in one extra onboarding question:
+
+1. **File-only** — no server; the agent reads and writes the vault directly.
+2. **Local** — one command serves the vault to every MCP app on your machine, with fast
+   ranked full-text search.
+3. **Remote** — the same server on your own ~$5 VPS behind HTTPS and a token, so web and
+   mobile clients get your memory too. A step-by-step guide with systemd/Caddy/Docker configs
+   is in [`skills/mnemaos-mcp/deploy/vps-setup.md`](../../skills/mnemaos-mcp/deploy/vps-setup.md).
+
+Cards marked `private: true` are never served remotely — the remote transport cannot return
+them, by construction. The index the server builds is derived data: delete it any time,
+rebuild it with one command; the vault stays plain Markdown you own.
+
 ## What it does not do (boundaries)
 
 - It does not publish, send messages as you, pay for anything, or delete significant data without
   your explicit consent.
 - It does not require the cloud or run anything you can't see.
-- MnemaOS does not include MCP, vector search, mobile apps, or cross-device sync. It is a local
-  Markdown memory system, and it works fully as one.
+- The memory itself never depends on a server: MnemaOS is a local Markdown memory system that
+  works fully as one. The MCP server is an optional overlay; there is still no vector database,
+  no embeddings, no mobile app, and no SaaS in this package.
 
 ## Privacy / local-first
 
@@ -76,7 +97,8 @@ reference-implementation name.
 
 - **Vika — email marketer, web-only ChatGPT.** No CLI, no local files. MnemaOS builds her a clean
   vault from scratch and ships the startup/closure routines as **copy-paste blocks** — it never
-  promises automation her web-only setup can't run.
+  promises automation her web-only setup can't run. If she later hosts the optional memory
+  server, a web client that supports custom MCP connectors can attach her memory directly.
 - **Katya — content & SEO lead, big messy folder, uses Codex.** MnemaOS adopts her existing
   folder: read-only audit → folder map → proposed structure → her approval → full backup → copies
   her files into the new layer → migration report → index + smoke test.

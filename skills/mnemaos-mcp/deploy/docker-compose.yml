@@ -1,0 +1,19 @@
+# Docker variant (optional — systemd is simpler if the VPS is not Docker-managed).
+# Usage:
+#   MNEMAOS_TOKEN=... VAULT_PATH=/srv/memory/vault docker compose up -d
+# TLS still belongs to your reverse proxy (Caddy/nginx/Traefik) in front of :8765.
+
+services:
+  mnemaos-mcp:
+    image: python:3.12-slim
+    container_name: mnemaos-mcp
+    restart: unless-stopped
+    environment:
+      - MNEMAOS_TOKEN=${MNEMAOS_TOKEN:?set MNEMAOS_TOKEN}
+    volumes:
+      - ${VAULT_PATH:?set VAULT_PATH}:/vault
+      - ./..:/app:ro
+    working_dir: /app
+    command: python3 server.py --vault /vault --http 0.0.0.0:8765
+    ports:
+      - "127.0.0.1:8765:8765"

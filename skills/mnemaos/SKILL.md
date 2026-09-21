@@ -7,11 +7,13 @@ description: >
   user wants to "give my AI a memory", "set up a personal memory system", "make my
   assistant remember between sessions", "build a second brain my AI can use", "turn
   my notes folder into agent memory", "stop re-explaining my context every chat", or
-  "adopt my existing work folder into a memory layer". Works greenfield (from scratch)
-  or by adopting an existing folder. Ships a model-agnostic core plus adapters for any
-  LLM host. Do NOT use for one-off tasks (just do the task), for building a chatbot,
-  for cloud/SaaS memory products, or for setting up a task-automation loop (that is a
-  different skill).
+  "adopt my existing work folder into a memory layer", or "serve my memory to other
+  apps and devices over MCP". Works greenfield (from scratch) or by adopting an
+  existing folder. Ships a model-agnostic core plus adapters for any LLM host, and an
+  optional personal memory server (MCP) for reaching the memory from other apps, the
+  web, or a phone. Do NOT use for one-off tasks (just do the task), for building a
+  chatbot, for cloud/SaaS memory products, or for setting up a task-automation loop
+  (that is a different skill).
 allowed-tools: Read, Write, Edit, Bash, Glob, Grep
 ---
 
@@ -95,6 +97,11 @@ The six dimensions:
    distillation into cards and regular hygiene? Want an independent reviewer pass in
    closure? Want the optional RAW/Wiki/Outputs source-library frame and the question-
    report habit? → how big a system to build. Offer the full shape; let them choose less.
+7. **Reach** — should the memory be readable only by the agent on this machine, or also
+   by other MCP-capable apps here, or by other devices (web chat, phone)? → whether to
+   install the optional memory server (`mnemaos-mcp`), locally or on the user's own
+   server. File-only is a complete, first-class answer — do not upsell. Wording and the
+   mapping: `references/mcp-layer.md`.
 
 Read `references/onboarding-interview.md` for the full question bank and how to interpret
 answers. Read it before you start interviewing.
@@ -121,6 +128,11 @@ needs.
 6. Read `references/safety-and-boundaries.md` — the limits the generated skills must carry.
 7. If they chose the optional source-library frame or question-report habit, read
    `references/optional-modules.md`.
+8. If dimension 7 chose more reach than a file-reading agent, read
+   `references/mcp-layer.md` — what changes in the generated startup/closure skills,
+   the privacy walk (`private: true`), and the host registration snippets
+   (`assets/host-snippets.md`). The server itself ships next to this skill in
+   `mnemaos-mcp/` with its own README, contracts, and server deployment guide.
 
 ## Phase 3 — Generate the system (greenfield)
 
@@ -194,7 +206,14 @@ Verify before declaring success. These are **two different** checks — do not c
    "write a two-line note about today") and confirm an episode landed in `inbox.md` —
    proves *closure* works. Use a harmless task so nothing risky happens on the first run.
 
-3. **Walk the user through what happened** so they understand the moving parts.
+3. **If the memory server was installed (dimension 7)** — verify it too:
+   run `python3 mnemaos-mcp/smoke_test_mcp.py <vault>` (must end `0 failed`); then in a
+   **fresh** session of the connected client ask "what do you know about me?" — it should
+   call `memory_context` and answer from the vault unprompted. For a remote setup, also
+   run the deploy guide's curl checks: with token → answer, without token → 401, and one
+   `private: true` card invisible remotely.
+
+4. **Walk the user through what happened** so they understand the moving parts.
 
 If the dry-run cannot complete because of a real environment limit, report the specific
 blocker and the smallest change that would unblock it — do not fake success.
@@ -275,14 +294,20 @@ mnemaos/
     safety-and-boundaries.md       — limits the generated skills carry
     adopt-existing-folder.md       — the adopt-an-existing-folder migration flow
     optional-modules.md            — RAW/Wiki/Outputs frame, reports, provenance, trust
+    mcp-layer.md                   — the optional memory server: interview, install, verify
   assets/
     vault-template/                — the vault skeleton copied to the user
     templates/                     — card / project-readme / closure-entry (vault README lives in vault-template/)
     adapters/                      — adapter-template + cli-agent + desktop-app examples
     examples/                      — annotated mnemaos-config.example.yaml
+    host-snippets.md               — registering the memory server with common LLM hosts
     docs/                          — package-internal docs (README, SETUP master) referenced by onboarding
   scripts/
     smoke_test.py                  — clean-environment structural check (stdlib-only)
     index_vault.py                 — deterministic vault indexer (stdlib-only)
     make_test_fixtures.py          — generate the three reviewer scenarios (Вика/Катя/advanced)
 ```
+
+The optional memory server lives next to this skill as `mnemaos-mcp/` (server, indexer,
+write gate, its own smoke test, and a step-by-step server deployment guide in
+`mnemaos-mcp/deploy/vps-setup.md`).

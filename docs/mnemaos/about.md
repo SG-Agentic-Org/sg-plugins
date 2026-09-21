@@ -103,9 +103,12 @@ revert from `_mnemaos_backup/`. Junk is flagged, not deleted — the decision st
 - It does not run anything in the cloud you can't see. If your host can't run a routine
   unattended (e.g. web chat with no file access), it says so and gives you a manual fallback —
   it never fakes automation.
-- **MnemaOS does not include:** any MCP server; vector retrieval / RAG / embeddings; a mobile
-  companion; cross-device or cloud sync; a knowledge-graph export. It is a local Markdown memory
-  system and works fully as one.
+- **The memory never depends on a server.** MnemaOS is a local Markdown memory system and works
+  fully as one. The package does ship an **optional** memory server (`mnemaos-mcp/` — plain
+  standard-library Python) that serves the same vault to any MCP-capable client, locally or from
+  a server you own; skipping it changes nothing about the memory itself. There is still no
+  vector retrieval / RAG / embeddings, no mobile companion, no cloud sync service, and no
+  knowledge-graph export in this package.
 
 ## Privacy and local-first
 
