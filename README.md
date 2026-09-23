@@ -57,6 +57,7 @@ Standalone skills that can be installed directly without a full plugin.
 | [clear-writing](skills/clear-writing/) | RU | Business writing following Ilyakhov & Sarycheva methodology |
 | [autonomous-loop-onboarding](skills/autonomous-loop-onboarding/) | EN | Interview-driven setup that turns any task manager + LLM host into a personalized autonomous task loop (queue → agent works → self-review → approve). Model-agnostic core + adapters. |
 | [mnemaos](skills/mnemaos/) | EN | Interview-driven setup that gives your AI a personal, local Markdown memory — a "vault" it reads at session start and writes back to at the end. Greenfield or adopt an existing folder (read-only audit → approval → backup → migration report). Model-agnostic core + adapters. Optional own memory server over MCP — local or on your VPS: [skills/mnemaos-mcp/](skills/mnemaos-mcp/). Full docs: [docs/mnemaos/](docs/mnemaos/). |
+| [architect](skills/architect/) | EN, RU | Turns what you say about your own work into a running automation: a plain-language interview, a one-page brief, agents that write the spec, the checks, build and try to break it, then a weekly watchdog and a guide in your language. Model-agnostic core + adapters for Claude Code, Codex, Gemini and web chat. |
 
 ### Installing a skill
 
